@@ -68,6 +68,22 @@ class Database:
 			self.cur.execute(sql_script)
 		self.conn.commit()
 
+	def get_student_data(self, id):
+		row = {column: data for (column, data) in \
+				zip([r[1] for r in self.cur.execute('PRAGMA table_info(students)')], \
+				[r for r in self.cur.execute('SELECT * FROM students WHERE id=?', (id, ))][0])}
+		return row
+
+	def get_table_data(self, id, table_name):
+		rows = [r for r in self.cur.execute('SELECT * FROM ' + table_name + ' WHERE id=?', (id, ))]
+		return_data = []
+		for row in rows:
+			return_data.append((row[0], {column: data for (column, data) in \
+				zip([r[1] for r in self.cur.execute('PRAGMA table_info(students)')], row)}))
+		return_data.sort() #sort
+		return_data = [r[1] for r in return_data] #return only data without indices
+		return return_data
+
 	def set_check_in_interval(self, interval):
 		return
 
@@ -75,7 +91,9 @@ d = Database()
 #d.create_open_database(new_db=os.path.abspath(os.pardir) + '\database\\test.db', current=True)
 d.create_open_database()
 #d.add_student({'id': '0'})
+#d.get_student_data('0')
 #d.add_to_table('payments', [{'id': '0', 'value': '500'}, {'id': '0', 'value': '700'}])
 #d.add_to_table('guardians', [{'id': '0', 'first': 'John'}])
 #d.update_student('0', {'first': 'test'})
 #d.update_table('0', 'guardians', [{'num': '1', 'last': 'Smith', 'city': 'New York'}])
+#d.get_table_data('0', 'payments')
