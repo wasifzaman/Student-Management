@@ -26,35 +26,56 @@ class Database:
 		self.cur = self.conn.cursor()
 		return {'state': 'success'}
 
-	def insert_(self, data, to_table):
-		sql_script = 'PRAGMA table_info(' + to_table + ')'
-		table_columns = [row[1] for row in self.cur.execute(sql_script)]
-		table_values = tuple([data[column_name] \
+	def gen_insert_sql_script(self, data, to_table):
+		table_columns = [row[1] for row in self.cur.execute('PRAGMA table_info(' + to_table + ')')]
+		if table_columns[0] == 'num': table_columns.pop(0)
+		table_values = str(tuple([data[column_name] \
 			if column_name in data else '' for \
-			column_name in table_columns])
-		value_fill = str(tuple(['?' for i in table_columns])).replace("'", '')
-		return {'prefix': 'INSERT INTO ' + to_table + ' VALUES ' + value_fill, 'suffix': table_values}
+			column_name in table_columns]))
+		value_fill = str(tuple([i for i in table_columns])).replace("'", '')
+		return 'INSERT INTO ' + to_table + value_fill + 'VALUES' + table_values
+
+	def gen_update_sql_script(self, id, data, to_table):
+		table_columns = [row[1] for row in self.cur.execute('PRAGMA table_info(' + to_table + ')')]
+		row = data['num'] if table_columns[0] == 'num' else False
+		update_script = 'UPDATE ' + to_table + ' SET '
+		for column, value in data.items():
+			update_script += column + "='" + value + "', "
+		update_script = update_script[:-2]
+		update_script += " WHERE "
+		update_script += ("num=" + "'" + row + "'") if row else ("id=" + "'" + id + "'")
+		return update_script
 
 	def add_student(self, table_data):
-		sql_script = self.insert_(table_data, 'students')
-		self.cur.execute(sql_script['prefix'], sql_script['suffix'])
+		sql_script = self.gen_insert_sql_script(table_data, 'students')
+		self.cur.execute(sql_script)
 		self.conn.commit()
 
-	def add_table(self, table_name, table_data):
+	def add_to_table(self, table_name, table_data):
 		for row in table_data:
-			sql_script = self.insert_(row, table_name)
-			self.cur.execute(sql_script['prefix'], sql_script['suffix'])
-			self.conn.commit()
+			sql_script = self.gen_insert_sql_script(row, table_name)
+			self.cur.execute(sql_script)
+		self.conn.commit()
 
 	def update_student(self, id, table_data):
-		return
+		sql_script = self.gen_update_sql_script(id, table_data, 'students')
+		self.cur.execute(sql_script)
+		self.conn.commit()
 
 	def update_table(self, id, table_name, table_data):
+		for row in table_data:
+			sql_script = self.gen_update_sql_script(id, row, table_name)
+			self.cur.execute(sql_script)
+		self.conn.commit()
+
+	def set_check_in_interval(self, interval):
 		return
 
 d = Database()
 #d.create_open_database(new_db=os.path.abspath(os.pardir) + '\database\\test.db', current=True)
 d.create_open_database()
 #d.add_student({'id': '0'})
-#d.add_table('payments', [{'id': '0', 'value': '500'}])
-#d.add_table('guardians', [{'id': '0', 'first': 'John'}])
+#d.add_to_table('payments', [{'id': '0', 'value': '500'}, {'id': '0', 'value': '700'}])
+#d.add_to_table('guardians', [{'id': '0', 'first': 'John'}])
+#d.update_student('0', {'first': 'test'})
+#d.update_table('0', 'guardians', [{'num': '1', 'last': 'Smith', 'city': 'New York'}])
