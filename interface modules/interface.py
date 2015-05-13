@@ -77,21 +77,25 @@ def find_all(root, output, type_):
 				output.append(child)
 
 
-'''
+
 from widgets import *
 import sys, os
 images = os.path.abspath(os.pardir) + '\images\\'
 w = Window()
 w.add_column()
 w.add_column()
+'''
 w.add_widget_to(DefaultLabel, 0, attributes={'text': 'first name*'})
 init_focus = w.add_widget_to(DefaultEntry, 0, limit_to='.2f', tag='last')
 w.add_widget_to(DefaultLabel, 0, attributes={'text': 'last name*'})
 w.add_widget_to(DefaultEntry, 0, tag='first', limit_to='int')
 w.add_widget_to(DefaultButton, 0, exec_func=w.generate_data_table, bg='teal', fg='white', hover_bg='pink', no_text=True, image=images + 'User-Add-128.png')
 w.allocate_data({'first': 'John', 'last': 'Smith'})
+init_focus.focus()
+'''
 #print(w.generate_data_table())
 #w.clear_all_widgets()
-init_focus.focus()
+table = w.add_widget_to(Table, 0, data_table=[['test', 'test2'],['test3', 'test4']])
+#table.delete_all()
+table.add_row(['test5', 'test6'])
 w.mainloop()
-'''

@@ -94,3 +94,55 @@ class DefaultList(Listbox):
 	def remove(self):
 		self.delete()
 		return
+
+class Table():
+
+	#add scrollbars
+	#add window size
+
+	def __init__(self, parent, data_table=[[]]):
+		self.frame = Frame(parent, bg='lightgrey')
+		self.selected = None
+		self.labels = []
+		for row in data_table:
+			row_labels = []
+			for data in row:
+				row_labels.append(
+					self.add_cell(data_table.index(row), row.index(data), data))
+			self.labels.append(row_labels)
+
+	def add_cell(self, row, column, data):
+		cell = Frame(self.frame, bg='white')
+		label = Label(cell, text=data, justify=LEFT, bg='white')
+		cell.grid(row=row, column=column, sticky=EW)
+		label.pack(anchor=W)
+		label.bind('<Button-1>', lambda event: self.select_row(row))
+		return cell
+
+	def add_row(self, data):
+		row_labels = []
+		for data_ in data:
+			row_labels.append(
+				self.add_cell(len(self.labels), data.index(data_), data_))
+		self.labels.append(row_labels)
+
+	def delete_row(self, row_num):	
+		for label in self.labels[row_num]:
+			label.destroy()
+		self.labels.pop(row_num)
+
+	def delete_all(self):
+		while len(self.labels) > 0:
+			self.delete_row(0)
+
+	def select_row(self, row_num):
+		if self.selected != None:
+			for label in self.labels[self.selected]:
+				cell = label.winfo_children()[0]
+				label.config(bg='white')
+				cell.config(bg='white', fg='black')
+		for label in self.labels[row_num]:
+			cell = label.winfo_children()[0]
+			label.config(bg='blue')
+			cell.config(bg='blue', fg='white')
+		self.selected = row_num
