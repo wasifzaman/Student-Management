@@ -101,7 +101,19 @@ class Table():
 	#add window size
 
 	def __init__(self, parent, data_table=[[]]):
-		self.frame = Frame(parent, bg='lightgrey')
+		self.frame = Frame(parent)
+		self.canvas = Canvas(self.frame, bg='white')
+		self.frame_ = Frame(self.canvas, bg='lightgrey')
+
+		self.xscrollbar = Scrollbar(self.frame, orient="horizontal", command=self.canvas.xview)
+		self.yscrollbar = Scrollbar(self.frame, orient="vertical", command=self.canvas.yview)
+		self.canvas.create_window((0,0), window=self.frame_, anchor=NW)
+
+		self.frame_.grid(row=0, column=0)
+		self.canvas.grid(row=0, column=0)
+		#self.yscrollbar.grid(row=0, column=1, sticky=NS)
+		#self.xscrollbar.grid(row=1, column=0, sticky=EW)
+
 		self.selected = None
 		self.labels = []
 		for row in data_table:
@@ -111,10 +123,12 @@ class Table():
 					self.add_cell(data_table.index(row), row.index(data), data))
 			self.labels.append(row_labels)
 
+		#self.frame.bind("<Configure>", self.updateScroll)
+
 	def add_cell(self, row, column, data):
-		cell = Frame(self.frame, bg='white')
+		cell = Frame(self.frame_, bg='white')
 		label = Label(cell, text=data, justify=LEFT, bg='white')
-		cell.grid(row=row, column=column, sticky=EW)
+		cell.grid(row=row, column=column, sticky=EW, padx=(0, 1), pady=(0, 1))
 		label.pack(anchor=W)
 		label.bind('<Button-1>', lambda event: self.select_row(row))
 		return cell
@@ -146,3 +160,9 @@ class Table():
 			label.config(bg='blue')
 			cell.config(bg='blue', fg='white')
 		self.selected = row_num
+
+	def updateScroll(self, event):
+		self.frame_.update_idletasks()
+		self.canvas.config(scrollregion=self.canvas.bbox(ALL))
+		self.canvas.config(xscrollcommand=self.xscrollbar.set)
+		self.canvas.config(yscrollcommand=self.yscrollbar.set)

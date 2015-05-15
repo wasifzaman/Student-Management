@@ -8,9 +8,10 @@ from interface import *
 w = Window()
 #w.configure(background='grey')
 
-w.add_column()
-w.add_column()
-w.add_column()
+w.add_row()
+w.add_column(0)
+w.add_column(0)
+w.add_column(0)
 
 #for column in w.columns.values():
 #	column.configure(bg='grey')

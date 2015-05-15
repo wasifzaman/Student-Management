@@ -3,7 +3,7 @@ from widgets import *
 
 class Window(Tk):
 
-	def __init__(self, child=False):
+	def __init__(self, child=False, **kwargs):
 		if child:
 			Toplevel.__init__(self)
 			self.wm_state('normal')
@@ -13,14 +13,21 @@ class Window(Tk):
 			Tk.__init__(self)
 			self.wm_state('zoomed')
 		self.columns = {}
+		self.rows = {}
 
-	def add_column(self, attributes=False):
-		index = len(self.columns)
-		self.columns[index] = Frame(self)
-		self.columns[index].pack(side=LEFT, anchor=N, padx=10, pady=10)
+	def add_row(self):
+		index = len(self.rows)
+		self.rows[index] = Frame(self)
+		self.rows[index].pack(anchor=N, padx=10, pady=10)
+		self.columns[index] = {}
 
-	def add_widget_to(self, widget, column_num, tag=False, attributes=False, **kwargs):
-		widget_ = widget(self.columns[column_num], **kwargs)
+	def add_column(self, row_num):
+		index = len(self.columns[row_num])
+		self.columns[row_num][index] = Frame(self.rows[row_num])
+		self.columns[row_num][index].pack(side=LEFT, anchor=N, padx=10, pady=10)
+
+	def add_widget_to(self, widget, column_num, row_num=0, tag=False, attributes=False, **kwargs):
+		widget_ = widget(self.columns[row_num][column_num], **kwargs)
 		widget_.frame.pack(anchor=W, padx=1, pady=1)
 		if tag: setattr(widget_, 'tag', tag)
 		if attributes:
@@ -81,21 +88,38 @@ def find_all(root, output, type_):
 from widgets import *
 import sys, os
 images = os.path.abspath(os.pardir) + '\images\\'
-w = Window()
-w.add_column()
-w.add_column()
+test_win = Window()
+test_win.add_row()
+test_win.add_column(0)
+test_win.add_column(0)
 '''
-w.add_widget_to(DefaultLabel, 0, attributes={'text': 'first name*'})
-init_focus = w.add_widget_to(DefaultEntry, 0, limit_to='.2f', tag='last')
-w.add_widget_to(DefaultLabel, 0, attributes={'text': 'last name*'})
-w.add_widget_to(DefaultEntry, 0, tag='first', limit_to='int')
-w.add_widget_to(DefaultButton, 0, exec_func=w.generate_data_table, bg='teal', fg='white', hover_bg='pink', no_text=True, image=images + 'User-Add-128.png')
-w.allocate_data({'first': 'John', 'last': 'Smith'})
+test_win.add_widget_to(DefaultLabel, 0, attributes={'text': 'first name*'})
+init_focus = test_win.add_widget_to(DefaultEntry, 0, limit_to='.2f', tag='last')
+test_win.add_widget_to(DefaultLabel, 0, attributes={'text': 'last name*'})
+test_win.add_widget_to(DefaultEntry, 0, tag='first', limit_to='int')
+test_win.add_widget_to(DefaultButton, 0, exec_func=test_win.generate_data_table, bg='teal', fg='white', hover_bg='pink', no_text=True, image=images + 'User-Add-128.png')
+test_win.allocate_data({'first': 'John', 'last': 'Smith'})
 init_focus.focus()
 '''
-#print(w.generate_data_table())
-#w.clear_all_widgets()
-table = w.add_widget_to(Table, 0, data_table=[['test', 'test2'],['test3', 'test4']])
+#print(test_win.generate_data_table())
+#test_win.clear_all_widgets()
+#table = test_win.add_widget_to(Table, 0, data_table=[['test', 'test2'],['test3', 'test4']])
+#table.canvas.config(width=500, height=1000)
 #table.delete_all()
-table.add_row(['test5', 'test6'])
-w.mainloop()
+#table.add_row(['test5', 'test6'])
+
+of = Frame(test_win)
+of.pack()
+c = Canvas(of, width=500, height=500, bg='red')
+f = Frame(c)
+c.create_window((0,0), window=f, anchor=NW)
+l = Frame(f)
+l.grid()
+Label(l, text='test').grid()
+c.grid()
+xscrollbar = Scrollbar(of, orient="horizontal", command=c.xview)
+yscrollbar = Scrollbar(of, orient="vertical", command=c.yview)
+yscrollbar.grid(row=0, column=1, sticky=NS)
+xscrollbar.grid(row=1, column=0, sticky=EW)
+
+test_win.mainloop()

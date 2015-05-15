@@ -5,12 +5,16 @@ images = os.path.abspath(os.pardir) + '\images\\'
 from widgets import *
 from interface import *
 
-add_student = Window(child=True)
+add_student = Window(child=True, header='Add Student')
 
-add_student.add_column()
-add_student.add_column()
-add_student.add_column()
-add_student.add_column()
+add_student.add_row()
+add_student.add_row()
+add_student.add_column(0)
+add_student.add_column(0)
+add_student.add_column(0)
+add_student.add_column(0)
+add_student.add_column(1)
+add_student.add_column(1)
 
 from add_guardian import add_guardian
 
@@ -36,10 +40,10 @@ add_student.add_widget_to(DefaultButton, 2, exec_func=lambda: True, bg='#2B58A6'
 payment_list = add_student.add_widget_to(Table, 3)
 add_student.add_widget_to(DefaultButton, 3, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Add Payment'}, width=26)
 add_student.add_widget_to(DefaultButton, 3, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Remove Payment'}, width=26)
+add_student.add_widget_to(DefaultButton, 0, row_num=1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Add Student'}, width=26)
+add_student.add_widget_to(DefaultButton, 1, row_num=1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Cancel'}, width=26)
 
 '''
-add_student.add_widget_to(DefaultButton, 0, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Modify Student'}, image=images + 'User-Modify-128.png')
-add_student.add_widget_to(DefaultButton, 1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Log In'}, image=images + 'Login-Door-128.png')
 add_student.add_widget_to(DefaultButton, 1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Log Out'}, image=images + 'Logout-Door-128.png')
 add_student.add_widget_to(DefaultButton, 2, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Print'}, image=images + 'Printer-128.png')
 add_student.add_widget_to(DefaultButton, 2, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Settings'}, image=images + 'Settings-01-128.png')
