@@ -5,7 +5,7 @@ images = os.path.abspath(os.pardir) + '\images\\'
 from widgets import *
 from interface import *
 
-add_guardian = Window(child=True, header='Add Guardian')
+add_guardian = Window(child=True, title='Add Guardian')
 
 add_guardian.add_row()
 add_guardian.add_row()

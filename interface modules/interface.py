@@ -9,15 +9,25 @@ class Window(Tk):
 			self.wm_state('normal')
 			self.overrideredirect(1)
 			self.withdraw()
+			self.title_frame = Frame(self, bg='navy')
+			self.title = Label(self.title_frame, text=kwargs['title'], bg='navy', fg='white')
+			self.title.pack()
+			self.title_frame.pack(fill=X)
+			self.outer = Frame(self, bg='navy')
+			self.body = Frame(self.outer)
+			self.outer.pack()
+			self.body.pack(padx=1, pady=(0, 1))
 		else:
 			Tk.__init__(self)
 			self.wm_state('zoomed')
+			self.body = Frame(self)
+			self.body.pack()
 		self.columns = {}
 		self.rows = {}
 
 	def add_row(self):
 		index = len(self.rows)
-		self.rows[index] = Frame(self)
+		self.rows[index] = Frame(self.body)
 		self.rows[index].pack(anchor=N, padx=10, pady=10)
 		self.columns[index] = {}
 
@@ -85,6 +95,7 @@ def find_all(root, output, type_):
 
 
 
+'''
 from widgets import *
 import sys, os
 images = os.path.abspath(os.pardir) + '\images\\'
@@ -92,7 +103,6 @@ test_win = Window()
 test_win.add_row()
 test_win.add_column(0)
 test_win.add_column(0)
-'''
 test_win.add_widget_to(DefaultLabel, 0, attributes={'text': 'first name*'})
 init_focus = test_win.add_widget_to(DefaultEntry, 0, limit_to='.2f', tag='last')
 test_win.add_widget_to(DefaultLabel, 0, attributes={'text': 'last name*'})
@@ -104,10 +114,12 @@ init_focus.focus()
 #print(test_win.generate_data_table())
 #test_win.clear_all_widgets()
 #table = test_win.add_widget_to(Table, 0, data_table=[['test', 'test2'],['test3', 'test4']])
-#table.canvas.config(width=500, height=1000)
+#table.canvas.config(width=200, height=200)
 #table.delete_all()
-#table.add_row(['test5', 'test6'])
+#for i in range(0, 100):
+	#table.add_row(['test5', 'test6'])
 
+'''
 of = Frame(test_win)
 of.pack()
 c = Canvas(of, width=500, height=500, bg='red')
@@ -121,5 +133,5 @@ xscrollbar = Scrollbar(of, orient="horizontal", command=c.xview)
 yscrollbar = Scrollbar(of, orient="vertical", command=c.yview)
 yscrollbar.grid(row=0, column=1, sticky=NS)
 xscrollbar.grid(row=1, column=0, sticky=EW)
-
 test_win.mainloop()
+'''

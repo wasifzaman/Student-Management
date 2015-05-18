@@ -102,18 +102,11 @@ class Table():
 
 	def __init__(self, parent, data_table=[[]]):
 		self.frame = Frame(parent)
-		self.canvas = Canvas(self.frame, bg='white')
-		self.frame_ = Frame(self.canvas, bg='lightgrey')
+		self.canvas = Canvas(self.frame, width=500, height=500, bg='white')
+		self.canvas.grid()
 
-		self.xscrollbar = Scrollbar(self.frame, orient="horizontal", command=self.canvas.xview)
-		self.yscrollbar = Scrollbar(self.frame, orient="vertical", command=self.canvas.yview)
-		self.canvas.create_window((0,0), window=self.frame_, anchor=NW)
-
-		self.frame_.grid(row=0, column=0)
-		self.canvas.grid(row=0, column=0)
-		#self.yscrollbar.grid(row=0, column=1, sticky=NS)
-		#self.xscrollbar.grid(row=1, column=0, sticky=EW)
-
+		self.inner_frame = Frame(self.canvas, bg='lightblue')
+		self.canvas.create_window((0,0), window=self.inner_frame, anchor=NW)
 		self.selected = None
 		self.labels = []
 		for row in data_table:
@@ -123,10 +116,16 @@ class Table():
 					self.add_cell(data_table.index(row), row.index(data), data))
 			self.labels.append(row_labels)
 
-		#self.frame.bind("<Configure>", self.updateScroll)
+		self.xscrollbar = Scrollbar(self.frame, orient="horizontal", command=self.canvas.xview)
+		self.yscrollbar = Scrollbar(self.frame, orient="vertical", command=self.canvas.yview)
+		self.yscrollbar.grid(row=0, column=1, sticky=NS)
+		self.xscrollbar.grid(row=1, column=0, sticky=EW)
+		self.canvas.config(scrollregion=self.canvas.bbox(ALL))
+		self.canvas.config(xscrollcommand=self.xscrollbar.set)
+		self.canvas.config(yscrollcommand=self.yscrollbar.set)
 
 	def add_cell(self, row, column, data):
-		cell = Frame(self.frame_, bg='white')
+		cell = Frame(self.inner_frame, bg='white')
 		label = Label(cell, text=data, justify=LEFT, bg='white')
 		cell.grid(row=row, column=column, sticky=EW, padx=(0, 1), pady=(0, 1))
 		label.pack(anchor=W)
@@ -139,11 +138,13 @@ class Table():
 			row_labels.append(
 				self.add_cell(len(self.labels), data.index(data_), data_))
 		self.labels.append(row_labels)
+		self.update_scroll()
 
 	def delete_row(self, row_num):	
 		for label in self.labels[row_num]:
 			label.destroy()
 		self.labels.pop(row_num)
+		self.update_scroll()
 
 	def delete_all(self):
 		while len(self.labels) > 0:
@@ -161,8 +162,8 @@ class Table():
 			cell.config(bg='blue', fg='white')
 		self.selected = row_num
 
-	def updateScroll(self, event):
-		self.frame_.update_idletasks()
+	def update_scroll(self):
+		self.inner_frame.update_idletasks()
 		self.canvas.config(scrollregion=self.canvas.bbox(ALL))
 		self.canvas.config(xscrollcommand=self.xscrollbar.set)
 		self.canvas.config(yscrollcommand=self.yscrollbar.set)
