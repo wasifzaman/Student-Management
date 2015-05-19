@@ -31,7 +31,7 @@ add_guardian.add_widget_to(DefaultLabel, 1, attributes={'text': 'state*'})
 add_guardian.add_widget_to(DefaultEntry, 1, tag='state')
 add_guardian.add_widget_to(DefaultLabel, 1, attributes={'text': 'zipcode*'})
 add_guardian.add_widget_to(DefaultEntry, 1, tag='zipcode')
-add_guardian.add_widget_to(DefaultButton, 0, row_num=1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Add Guardian'}, width=26)
+add_guardian.add_widget_to(DefaultButton, 0, row_num=1, exec_func=lambda: print(add_guardian.retrieve_data()), bg='#2B58A6', fg='white', attributes={'text': 'Add Guardian'}, width=26)
 add_guardian.add_widget_to(DefaultButton, 1, row_num=1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Cancel'}, width=26)
 
 '''

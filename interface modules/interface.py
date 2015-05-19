@@ -84,6 +84,18 @@ class Window(Tk):
 		y = screen_h/2 - size[1]/2
 		self.geometry("%dx%d+%d+%d" % (size + (x, y)))
 
+	def retrieve_data(self):
+		tagged_widgets = self.find_all_tagged_widgets()
+		data_table = {}
+
+		for widget in tagged_widgets:
+			data_table[widget.tag] = widget.stringvar.get()
+
+		return data_table
+
+	def link_window(self, variable):
+		return
+
 def find_all(root, output, type_):
 	if len(root.winfo_children()) == 0:
 		return
