@@ -75,7 +75,7 @@ class Window(Tk):
 		for widget in tagged_widgets:
 			widget.stringvar.set(data_table[widget.tag])
 
-	def show_child_center(self):
+	def show_center(self):
 		self.deiconify()
 		screen_w = self.winfo_screenwidth()
 		screen_h = self.winfo_screenheight()
@@ -83,6 +83,9 @@ class Window(Tk):
 		x = screen_w/2 - size[0]/2
 		y = screen_h/2 - size[1]/2
 		self.geometry("%dx%d+%d+%d" % (size + (x, y)))
+
+	def hide(self):
+		self.withdraw()
 
 	def retrieve_data(self):
 		tagged_widgets = self.find_all_tagged_widgets()
@@ -93,7 +96,11 @@ class Window(Tk):
 
 		return data_table
 
-	def link_window(self, variable):
+	def link_window(self, variable, window):
+		setattr(window, 'return_to_var', {})
+		variable = [window.return_to_var]
+		#or dictionary of return variables
+		#return data to multiple windows
 		return
 
 def find_all(root, output, type_):
