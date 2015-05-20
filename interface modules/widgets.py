@@ -129,28 +129,38 @@ class Table():
 		label = Label(cell, text=data, justify=LEFT, bg='white')
 		cell.grid(row=row, column=column, sticky=EW, padx=(0, 1), pady=(0, 1))
 		label.pack(anchor=W)
-		label.bind('<Button-1>', lambda event: self.select_row(row))
+		self.bind_cell(label, row)
 		return cell
+
+	def bind_cell(self, cell, row):
+		cell.bind('<Button-1>', lambda event: self.select_row(row))
 
 	def add_row(self, data):
 		row_labels = []
 		for data_ in data:
 			row_labels.append(
 				self.add_cell(len(self.labels), data.index(data_), data_))
-		self.labels.append(row_labels)
+		if len(self.labels) == 1 and len(self.labels[0]) == 0:
+			self.labels = [row_labels]
 		self.update_scroll()
 
 	def delete_row(self, row_num):	
 		for label in self.labels[row_num]:
 			label.destroy()
 		self.labels.pop(row_num)
+		for row in self.labels[row_num:]:
+			for cell in row:
+				self.bind_cell(cell.winfo_children()[0], self.labels.index(row))
+				#cell.winfo_children()[0].bind('<Button-1>', lambda event: self.select_row(self.labels.index(row) - 1))
 		self.update_scroll()
+		self.selected = None
 
 	def delete_all(self):
 		while len(self.labels) > 0:
 			self.delete_row(0)
 
 	def select_row(self, row_num):
+		print(row_num)
 		if self.selected != None:
 			for label in self.labels[self.selected]:
 				cell = label.winfo_children()[0]
@@ -167,3 +177,7 @@ class Table():
 		self.canvas.config(scrollregion=self.canvas.bbox(ALL))
 		self.canvas.config(xscrollcommand=self.xscrollbar.set)
 		self.canvas.config(yscrollcommand=self.yscrollbar.set)
+
+	def set_width(self, col_num, width):
+		if len(self.labels) > 0:
+			self.labels[0][col_num].winfo_children()[0].config(width=width)

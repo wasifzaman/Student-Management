@@ -17,6 +17,16 @@ add_student.add_column(1)
 add_student.add_column(1)
 
 from add_guardian import add_guardian
+from trigger import Trigger
+
+def add_to_guardians(dic):
+	guardian_list.add_row([dic['first'], dic['last']])
+
+def remove_from_guardians():
+	if guardian_list.selected != None:
+		guardian_list.delete_row(guardian_list.selected)
+
+add_student.link_window(Trigger(add_to_guardians), add_guardian)
 
 add_student.add_widget_to(DefaultLabel, 0, attributes={'text': 'first name*'})
 init_focus = add_student.add_widget_to(DefaultEntry, 0, tag='first')
@@ -36,7 +46,7 @@ add_student.add_widget_to(DefaultLabel, 1, attributes={'text': 'zipcode*'})
 add_student.add_widget_to(DefaultEntry, 1, tag='zipcode')
 guardian_list = add_student.add_widget_to(Table, 2)
 add_student.add_widget_to(DefaultButton, 2, exec_func=add_guardian.show_center, bg='#2B58A6', fg='white', attributes={'text': 'Add Guardian'}, width=26)
-add_student.add_widget_to(DefaultButton, 2, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Remove Guardian'}, width=26)
+add_student.add_widget_to(DefaultButton, 2, exec_func=remove_from_guardians, bg='#2B58A6', fg='white', attributes={'text': 'Remove Guardian'}, width=26)
 payment_list = add_student.add_widget_to(Table, 3)
 add_student.add_widget_to(DefaultButton, 3, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Add Payment'}, width=26)
 add_student.add_widget_to(DefaultButton, 3, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Remove Payment'}, width=26)
@@ -45,6 +55,10 @@ add_student.add_widget_to(DefaultButton, 1, row_num=1, exec_func=lambda: True, b
 
 guardian_list.canvas.config(width=200, height=200)
 payment_list.canvas.config(width=200, height=200)
+
+guardian_list.add_row(['First', 'Last'])
+guardian_list.set_width(0, 15)
+guardian_list.set_width(1, 15)
 '''
 add_student.add_widget_to(DefaultButton, 1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Log Out'}, image=images + 'Logout-Door-128.png')
 add_student.add_widget_to(DefaultButton, 2, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Print'}, image=images + 'Printer-128.png')

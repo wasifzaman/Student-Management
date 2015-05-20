@@ -77,6 +77,7 @@ class Window(Tk):
 
 	def show_center(self):
 		self.deiconify()
+		self.clear_all_widgets()
 		screen_w = self.winfo_screenwidth()
 		screen_h = self.winfo_screenheight()
 		size = tuple(int(_) for _ in self.geometry().split('+')[0].split('x'))
@@ -86,6 +87,10 @@ class Window(Tk):
 
 	def hide(self):
 		self.withdraw()
+		if hasattr(self, 'return_to_var'):
+			self.return_to_var.var.clear()
+			self.return_to_var.var.update(self.retrieve_data())
+			self.return_to_var.exec_func()
 
 	def retrieve_data(self):
 		tagged_widgets = self.find_all_tagged_widgets()
@@ -97,8 +102,7 @@ class Window(Tk):
 		return data_table
 
 	def link_window(self, variable, window):
-		setattr(window, 'return_to_var', {})
-		variable = [window.return_to_var]
+		setattr(window, 'return_to_var', variable)
 		#or dictionary of return variables
 		#return data to multiple windows
 		return
