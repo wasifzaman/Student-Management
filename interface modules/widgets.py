@@ -140,8 +140,10 @@ class Table():
 		for data_ in data:
 			row_labels.append(
 				self.add_cell(len(self.labels), data.index(data_), data_))
-		if len(self.labels) == 1 and len(self.labels[0]) == 0:
-			self.labels = [row_labels]
+		#if len(self.labels) == 1 and len(self.labels[0]) == 0:
+		#	self.labels = [row_labels]
+		#else:
+		self.labels.append(row_labels)
 		self.update_scroll()
 
 	def delete_row(self, row_num):	
@@ -153,6 +155,8 @@ class Table():
 				self.bind_cell(cell.winfo_children()[0], self.labels.index(row))
 				#cell.winfo_children()[0].bind('<Button-1>', lambda event: self.select_row(self.labels.index(row) - 1))
 		self.update_scroll()
+		#hide inner frame when it has no children
+		#print(len(self.inner_frame.winfo_children()))
 		self.selected = None
 
 	def delete_all(self):
