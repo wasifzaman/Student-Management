@@ -109,12 +109,13 @@ class Table():
 		self.canvas.create_window((0,0), window=self.inner_frame, anchor=NW)
 		self.selected = None
 		self.labels = []
-		for row in data_table:
-			row_labels = []
-			for data in row:
-				row_labels.append(
-					self.add_cell(data_table.index(row), row.index(data), data))
-			self.labels.append(row_labels)
+		if data_table != [[]]:
+			for i in range(0, len(data_table)):
+				row_labels = []
+				for j in range(0, len(data_table[i])):
+					row_labels.append(
+						self.add_cell(i, j, data_table[i][j]))
+				self.labels.append(row_labels)
 
 		self.xscrollbar = Scrollbar(self.frame, orient="horizontal", command=self.canvas.xview)
 		self.yscrollbar = Scrollbar(self.frame, orient="vertical", command=self.canvas.yview)
@@ -137,12 +138,9 @@ class Table():
 
 	def add_row(self, data):
 		row_labels = []
-		for data_ in data:
+		for i in range(0, len(data)):
 			row_labels.append(
-				self.add_cell(len(self.labels), data.index(data_), data_))
-		#if len(self.labels) == 1 and len(self.labels[0]) == 0:
-		#	self.labels = [row_labels]
-		#else:
+				self.add_cell(len(self.labels), i, data[i]))
 		self.labels.append(row_labels)
 		self.update_scroll()
 
@@ -164,7 +162,6 @@ class Table():
 			self.delete_row(0)
 
 	def select_row(self, row_num):
-		print(row_num)
 		if self.selected != None:
 			for label in self.labels[self.selected]:
 				cell = label.winfo_children()[0]
