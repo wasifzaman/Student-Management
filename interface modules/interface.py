@@ -85,9 +85,9 @@ class Window(Tk):
 		y = screen_h/2 - size[1]/2
 		self.geometry("%dx%d+%d+%d" % (size + (x, y)))
 
-	def hide(self):
+	def hide(self, cancel=False):
 		self.withdraw()
-		if hasattr(self, 'return_to_var'):
+		if not cancel and hasattr(self, 'return_to_var'):
 			self.return_to_var.var.clear()
 			self.return_to_var.var.update(self.retrieve_data())
 			self.return_to_var.exec_func()

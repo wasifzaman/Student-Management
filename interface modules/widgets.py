@@ -102,12 +102,22 @@ class Table():
 
 	def __init__(self, parent, data_table=[[]]):
 		self.frame = Frame(parent)
+		self.header_canvas = Canvas(self.frame, width=200, height=20, bg='white')
 		self.canvas = Canvas(self.frame, width=500, height=500, bg='white')
+		self.header_canvas.grid()
 		self.canvas.grid()
 
+		self.header_frame = Frame(self.header_canvas, bg='lightblue')
 		self.inner_frame = Frame(self.canvas, bg='lightblue')
-		self.canvas.create_window((0,0), window=self.inner_frame, anchor=NW)
+		self.header_canvas.create_window((0,0), window=self.header_frame, anchor=NW)
+		self.canvas.create_window((0,20), window=self.inner_frame, anchor=NW)
+		self.header_frame_ = Frame(self.header_frame, bg='lightblue')
+		self.inner_frame_ = Frame(self.inner_frame, bg='lightblue')
+		self.header_frame_.grid(padx=(1, 0), pady=(1, 0))
+		self.inner_frame_.grid(padx=(1, 0), pady=(1, 0))
 		self.selected = None
+		self.col_widths = {}
+		self.headers = []
 		self.labels = []
 		if data_table != [[]]:
 			for i in range(0, len(data_table)):
@@ -117,21 +127,32 @@ class Table():
 						self.add_cell(i, j, data_table[i][j]))
 				self.labels.append(row_labels)
 
-		self.xscrollbar = Scrollbar(self.frame, orient="horizontal", command=self.canvas.xview)
+		#self.xscrollbar = Scrollbar(self.frame, orient="horizontal", command=self.canvas.xview)
 		self.yscrollbar = Scrollbar(self.frame, orient="vertical", command=self.canvas.yview)
-		self.yscrollbar.grid(row=0, column=1, sticky=NS)
-		self.xscrollbar.grid(row=1, column=0, sticky=EW)
+		self.yscrollbar.grid(row=1, column=1, sticky=NS)
+		#self.xscrollbar.grid(row=2, column=0, sticky=EW)
 		self.canvas.config(scrollregion=self.canvas.bbox(ALL))
-		self.canvas.config(xscrollcommand=self.xscrollbar.set)
+		#self.canvas.config(xscrollcommand=self.xscrollbar.set)
 		self.canvas.config(yscrollcommand=self.yscrollbar.set)
 
-	def add_cell(self, row, column, data):
-		cell = Frame(self.inner_frame, bg='white')
+	def add_cell(self, row, column, data, frame=False, bind=True):
+		frame_ = self.inner_frame_ if not frame else frame
+		cell = Frame(frame_, bg='white')
 		label = Label(cell, text=data, justify=LEFT, bg='white')
+		if column in self.col_widths:
+			label.config(width=self.col_widths[column])
 		cell.grid(row=row, column=column, sticky=EW, padx=(0, 1), pady=(0, 1))
 		label.pack(anchor=W)
-		self.bind_cell(label, row)
+		if bind:
+			self.bind_cell(label, row)
 		return cell
+
+	def add_header(self, data):
+		row_labels = []
+		for i in range(0, len(data)):
+			row_labels.append(
+				self.add_cell(len(self.labels), i, data[i], self.header_frame_, False))
+		self.headers.append(row_labels)
 
 	def bind_cell(self, cell, row):
 		cell.bind('<Button-1>', lambda event: self.select_row(row))
@@ -154,7 +175,7 @@ class Table():
 				#cell.winfo_children()[0].bind('<Button-1>', lambda event: self.select_row(self.labels.index(row) - 1))
 		self.update_scroll()
 		#hide inner frame when it has no children
-		#print(len(self.inner_frame.winfo_children()))
+		#print(len(self.inner_frame_.winfo_children()))
 		self.selected = None
 
 	def delete_all(self):
@@ -174,11 +195,17 @@ class Table():
 		self.selected = row_num
 
 	def update_scroll(self):
-		self.inner_frame.update_idletasks()
+		self.inner_frame_.update_idletasks()
 		self.canvas.config(scrollregion=self.canvas.bbox(ALL))
-		self.canvas.config(xscrollcommand=self.xscrollbar.set)
+		#self.canvas.config(xscrollcommand=self.xscrollbar.set)
 		self.canvas.config(yscrollcommand=self.yscrollbar.set)
 
 	def set_width(self, col_num, width):
+		self.col_widths[col_num] = width
 		if len(self.labels) > 0:
 			self.labels[0][col_num].winfo_children()[0].config(width=width)
+		if len(self.headers) > 0:
+			self.headers[0][col_num].winfo_children()[0].config(width=width)
+
+class Dropdown():
+	pass

@@ -16,17 +16,6 @@ w.add_column(0)
 #for column in w.columns.values():
 #	column.configure(bg='grey')
 
-'''
-w.add_widget_to(DefaultLabel, 0, attributes={'text': 'first name*'})
-init_focus = w.add_widget_to(DefaultEntry, 0, limit_to='.2f', tag='last')
-w.add_widget_to(DefaultLabel, 0, attributes={'text': 'last name*'})
-w.add_widget_to(DefaultEntry, 0, tag='first', limit_to='int')
-w.allocate_data({'first': 'John', 'last': 'Smith'})
-#print(w.generate_data_table())
-#w.clear_all_widgets()
-init_focus.focus()
-'''
-
 from add_student import add_student
 from add_guardian import add_guardian
 

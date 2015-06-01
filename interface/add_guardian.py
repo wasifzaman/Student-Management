@@ -32,7 +32,7 @@ add_guardian.add_widget_to(DefaultEntry, 1, tag='state')
 add_guardian.add_widget_to(DefaultLabel, 1, attributes={'text': 'zipcode*'})
 add_guardian.add_widget_to(DefaultEntry, 1, tag='zipcode')
 add_guardian.add_widget_to(DefaultButton, 0, row_num=1, exec_func=add_guardian.hide, bg='#2B58A6', fg='white', attributes={'text': 'Add Guardian'}, width=26)
-add_guardian.add_widget_to(DefaultButton, 1, row_num=1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Cancel'}, width=26)
+add_guardian.add_widget_to(DefaultButton, 1, row_num=1, exec_func=lambda: add_guardian.hide(True), bg='#2B58A6', fg='white', attributes={'text': 'Cancel'}, width=26)
 
 '''
 add_guardian.add_widget_to(DefaultButton, 1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Log Out'}, image=images + 'Logout-Door-128.png')
