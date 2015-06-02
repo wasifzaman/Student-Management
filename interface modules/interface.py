@@ -28,13 +28,13 @@ class Window(Tk):
 	def add_row(self):
 		index = len(self.rows)
 		self.rows[index] = Frame(self.body)
-		self.rows[index].pack(anchor=N, padx=10, pady=10)
+		self.rows[index].pack(anchor=N, padx=5, pady=5)
 		self.columns[index] = {}
 
 	def add_column(self, row_num):
 		index = len(self.columns[row_num])
 		self.columns[row_num][index] = Frame(self.rows[row_num])
-		self.columns[row_num][index].pack(side=LEFT, anchor=N, padx=10, pady=10)
+		self.columns[row_num][index].pack(side=LEFT, anchor=N, padx=5, pady=5)
 
 	def add_widget_to(self, widget, column_num, row_num=0, tag=False, attributes=False, **kwargs):
 		widget_ = widget(self.columns[row_num][column_num], **kwargs)

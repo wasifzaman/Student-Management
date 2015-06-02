@@ -22,7 +22,7 @@ from trigger import Trigger
 
 student_list.add_widget_to(DefaultLabel, 0, attributes={'text': 'Search for:'})
 student_list.add_widget_to(DefaultEntry, 0)
-student_list.add_widget_to(DefaultLabel, 0, attributes={'text': 'By'})
+student_list.add_widget_to(DefaultLabel, 0, attributes={'text': 'By:'})
 student_list.add_widget_to(DefaultEntry, 0) #drop down
 student_list.add_widget_to(DefaultButton, 0, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Search'}, width=17)
 student_list_ = student_list.add_widget_to(Table, 2)
