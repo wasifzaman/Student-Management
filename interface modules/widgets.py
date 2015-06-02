@@ -207,5 +207,9 @@ class Table():
 		if len(self.headers) > 0:
 			self.headers[0][col_num].winfo_children()[0].config(width=width)
 
+	def set_canvas_dim(self, width, height):
+		self.canvas.config(width=width, height=height)
+		self.header_canvas.config(width=width - 4)
+
 class Dropdown():
 	pass

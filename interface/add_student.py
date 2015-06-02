@@ -62,8 +62,8 @@ add_student.add_widget_to(DefaultButton, 3, exec_func=remove_from_payments, bg='
 add_student.add_widget_to(DefaultButton, 0, row_num=1, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Add Student'}, width=26)
 add_student.add_widget_to(DefaultButton, 1, row_num=1, exec_func=lambda: add_student.hide(True), bg='#2B58A6', fg='white', attributes={'text': 'Cancel'}, width=26)
 
-guardian_list.canvas.config(width=204, height=200)
-payment_list.canvas.config(width=204, height=200)
+guardian_list.set_canvas_dim(width=204, height=200)
+payment_list.set_canvas_dim(width=204, height=200)
 
 guardian_list.add_header(['First Name', 'Last Name'])
 guardian_list.set_width(0, 13)

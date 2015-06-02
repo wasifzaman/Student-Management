@@ -84,9 +84,13 @@ class Window(Tk):
 		x = screen_w/2 - size[0]/2
 		y = screen_h/2 - size[1]/2
 		self.geometry("%dx%d+%d+%d" % (size + (x, y)))
+		self.grab_set()
 
 	def hide(self, cancel=False):
 		self.withdraw()
+		if hasattr(self, 'parent_win'):
+			self.parent_win.grab_set()
+			self.parent_win.focus_set()
 		if not cancel and hasattr(self, 'return_to_var'):
 			self.return_to_var.var.clear()
 			self.return_to_var.var.update(self.retrieve_data())
@@ -103,6 +107,7 @@ class Window(Tk):
 
 	def link_window(self, variable, window):
 		setattr(window, 'return_to_var', variable)
+		setattr(window, 'parent_win', self)
 		#or dictionary of return variables
 		#return data to multiple windows
 		return
