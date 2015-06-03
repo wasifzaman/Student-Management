@@ -33,6 +33,8 @@ class DefaultEntry(Entry):
 				self.is_valid = False
 		elif self.limit_to == 'date':
 			return
+		elif self.limit_to == 'time':
+			return
 
 class DefaultLabel(Label):
 	
