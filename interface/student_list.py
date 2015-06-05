@@ -11,9 +11,6 @@ student_list.add_row()
 student_list.add_row()
 student_list.add_column(0)
 student_list.add_column(0)
-student_list.add_column(0)
-student_list.add_column(0)
-student_list.add_column(1)
 student_list.add_column(1)
 
 from add_guardian import add_guardian
@@ -25,8 +22,8 @@ student_list.add_widget_to(DefaultEntry, 0)
 student_list.add_widget_to(DefaultLabel, 0, attributes={'text': 'By:'})
 student_list.add_widget_to(DefaultEntry, 0) #drop down
 student_list.add_widget_to(DefaultButton, 0, exec_func=lambda: True, bg='#2B58A6', fg='white', attributes={'text': 'Search'}, width=17)
-student_list_ = student_list.add_widget_to(Table, 2)
-student_list.add_widget_to(DefaultButton, 1, row_num=1, exec_func=lambda: student_list.hide(True), bg='#2B58A6', fg='white', attributes={'text': 'Close'}, width=26)
+student_list_ = student_list.add_widget_to(Table, 1)
+student_list.add_widget_to(DefaultButton, 0, row_num=1, exec_func=lambda: student_list.hide(True), bg='#2B58A6', fg='white', attributes={'text': 'Close'}, width=26)
 
 student_list_.set_canvas_dim(width=500, height=500)
 
